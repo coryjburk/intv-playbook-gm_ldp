@@ -12,7 +12,8 @@ For a fuller walkthrough of the student-facing experience, see the accompanying 
 
 ---
 
-**▶ Live tool:** **[Intv Playbook - GM LDP](https://coryjburk.github.io/intv-playbook-gm_ldp/)**
+**▶ Live Tool:** **[Intv Playbook - GM LDP](https://coryjburk.github.io/intv-playbook-gm_ldp/)**
+**▶ User Manual:** **[User Manual - GM LDP](https://coryjburk.github.io/intv-playbook-gm_ldp/eccles_gm_ldp_interview_playbook.html/)**
 
 ---
 
