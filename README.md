@@ -5,13 +5,17 @@ students targeting General Management (GM) and Rotational Leadership Development
 Program (LDP) interviews — modeled on consumer/retail-focused organizations
 (P&G, Target, PepsiCo-style rotational programs).
 
-Same family as: `pe-playbook`, `pm-playbook`, `tmay-playbook`, `mbb-playbook`, `ib-playbook`.
+---
 
-This README is both the **user-facing quick reference** and the **operational guide**
-for anyone maintaining, editing, or redeploying this tool. For a fuller walkthrough of
-the student-facing experience, see the accompanying `GM_LDP_Playbook_User_Manual.docx`.
+This README is both the **user-facing quick reference** and the **operational guide** for anyone maintaining, editing, or redeploying this tool. 
+For a fuller walkthrough of the student-facing experience, see the accompanying `GM_LDP_Playbook_User_Manual.docx`.
 
 ---
+
+**▶ Live tool:** **[Intv Playbook - GM LDP](https://coryjburk.github.io/intv-playbook-gm_ldp/)**
+
+---
+
 
 ## 1. What this is
 
