@@ -13,7 +13,7 @@ For a fuller walkthrough of the student-facing experience, see the accompanying 
 ---
 
 **▶ Live Tool:** **[Intv Playbook - GM LDP](https://coryjburk.github.io/intv-playbook-gm_ldp/)**
-- ▶ **User Manual:** [GM LDP User Manual (DOCX)](https://github.com/coryjburk/intv-playbook-gm_ldp/raw/main/GM_LDP_Playbook_User_Manual.docx)
+- **▶ **User Manual:** [GM LDP User Manual (DOCX)](https://github.com/coryjburk/intv-playbook-gm_ldp/raw/main/GM_LDP_Playbook_User_Manual.docx)**
 
 ---
 
