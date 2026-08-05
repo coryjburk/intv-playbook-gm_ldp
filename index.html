@@ -67,6 +67,13 @@ header.site{
 .btn:hover{border-color:var(--gold-dim); color:var(--gold);}
 .btn.primary{background:var(--red); border-color:var(--red); color:#fff;}
 .btn.primary:hover{background:#a30000; border-color:#a30000; color:#fff;}
+.btn:disabled, .btn.primary:disabled{
+  background:var(--bg-panel); border-color:var(--border); color:var(--text-faint);
+  cursor:not-allowed; opacity:0.7;
+}
+.btn:disabled:hover, .btn.primary:disabled:hover{
+  background:var(--bg-panel); border-color:var(--border); color:var(--text-faint);
+}
 
 /* Hero */
 .hero{
@@ -340,7 +347,7 @@ footer.site p{margin:4px 0;}
 
 <header class="site">
   <div class="brand">
-    <div class="brand-mark">U</div>
+    <div class="brand-mark">E</div>
     <div class="brand-text">
       <div class="t1">Eccles MBA — GM &amp; Rotational LDP Playbook</div>
       <div class="t2">General Management Leadership Development Program · Interview Playbook</div>
@@ -933,6 +940,10 @@ function saveEvaluationToDashboard(){
 
   confirmEl.textContent = "Saved to your Readiness Dashboard.";
   confirmEl.className = "save-confirm success";
+
+  const saveBtn = document.getElementById('saveEvalBtn');
+  saveBtn.disabled = true;
+  saveBtn.textContent = "Saved ✓";
 }
 
 function startTimerIfNeeded(){
@@ -970,6 +981,9 @@ function resetPractice(){
   });
   document.getElementById('saveConfirm').textContent = "";
   document.getElementById('saveConfirm').className = "save-confirm";
+  const saveBtn = document.getElementById('saveEvalBtn');
+  saveBtn.disabled = false;
+  saveBtn.textContent = "Save to Dashboard";
   refreshPromptBox();
   if(recognizing) toggleRecording();
 }
