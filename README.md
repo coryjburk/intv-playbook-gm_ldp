@@ -18,7 +18,7 @@ For a fuller walkthrough of the student-facing experience, see the accompanying 
 ---
 
 ## 1. What this is
-
+ 
 - **File:** `Eccles_GM_LDP_Interview_Playbook.html`
 - **Type:** Single self-contained HTML file — no build step, no external dependencies,
   no server required.
@@ -28,21 +28,20 @@ For a fuller walkthrough of the student-facing experience, see the accompanying 
   Dashboard that scores each practice attempt and tracks progress over time.
 - **Runs:** Directly from disk (`file://`) or from any static web host. No Node,
   Python, or backend of any kind is needed at runtime.
-
 ## 2. Repo / file structure
-
+ 
 ```
 Eccles_GM_LDP_Interview_Playbook.html   ← the entire tool (HTML + CSS + JS in one file)
 GM_LDP_Playbook_User_Manual.docx        ← student-facing Word user manual
 README.md                                ← this file
 ```
-
+ 
 There is no separate build process. All data (questions, frameworks, battlecard,
 red flags) is embedded directly as JavaScript arrays inside a single `<script>` tag
 near the bottom of the HTML file.
-
+ 
 ## 3. Tech stack
-
+ 
 - Vanilla HTML5 / CSS3 / JavaScript (ES6+). No React, no bundler, no npm dependency
   at runtime.
 - **Web Speech API** (`SpeechRecognition` / `webkitSpeechRecognition`) powers the
@@ -51,13 +50,12 @@ near the bottom of the HTML file.
 - No network calls of any kind are made by the tool itself. It is fully offline-capable
   once the HTML file has loaded.
 - Branding uses CSS custom properties defined in `:root` — see Section 6.
-
 ## 4. Data schema
-
+ 
 ### 4.1 Questions — `GM_QUESTIONS`
-
+ 
 Each entry in the `GM_QUESTIONS` array follows this shape:
-
+ 
 ```js
 {
   id: 1,                          // sequential integer, unique, never reused
@@ -70,9 +68,9 @@ Each entry in the `GM_QUESTIONS` array follows this shape:
   redFlag: "…"                    // the specific mistake to avoid on this question
 }
 ```
-
+ 
 **The 8 categories (must match exactly, including punctuation, for filters to group correctly):**
-
+ 
 1. General Management & P&L Ownership
 2. Cross-Functional Leadership & Influence Without Authority
 3. Commercial Strategy & Brand/Category Management
@@ -81,12 +79,11 @@ Each entry in the `GM_QUESTIONS` array follows this shape:
 6. Change Management & Navigating Ambiguity
 7. Consumer Insight & Go-to-Market Strategy
 8. Behavioral, Leadership & Career Motivation
-
 Current distribution: 13/12/13/12/13/12/13/12 = 100 questions total.
 Difficulty split: 15 Foundational / 64 Core / 21 Advanced.
-
+ 
 ### 4.2 Frameworks — `FRAMEWORKS`
-
+ 
 ```js
 {
   title: "P&L / Contribution Margin Waterfall",
@@ -94,30 +91,30 @@ Difficulty split: 15 Foundational / 64 Core / 21 Advanced.
   points: ["…", "…"]  // 3-4 actionable bullet points
 }
 ```
-
+ 
 ### 4.3 Battlecard — `BATTLECARD`
-
+ 
 ```js
 {
   title: "Must-Know GM/Rotational Concepts",
   items: ["…", "…"]   // 4-5 bullet points per section
 }
 ```
-
+ 
 ### 4.4 Red Flags — `REDFLAGS`
-
+ 
 ```js
 {
   title: "Data Dumping without Strategic Insight",
   desc: "…"  // one-paragraph description
 }
 ```
-
+ 
 ### 4.5 Practice history — `localStorage["gmldp_practice_history_v1"]`
-
+ 
 Unlike the four datasets above, this isn't baked into the HTML file — it's written by
 each student's own browser as they log evaluations, under this key:
-
+ 
 ```js
 // Array of attempt records, oldest first
 [
@@ -141,7 +138,7 @@ each student's own browser as they log evaluations, under this key:
   // …one record per "Save to Dashboard" click tied to a specific question
 ]
 ```
-
+ 
 A new record is appended (never overwritten) each time a student saves an evaluation
 on a specific question — so the same question evaluated 3 times produces 3 records,
 which is what powers the "progress over time" chart. Free-practice sessions (opened
@@ -149,17 +146,17 @@ via the header's "Practice Mode" button with no question selected) can still gen
 an evaluation prompt, but **cannot** be saved to this history, since there's no
 question ID to attach the record to — the Save button shows an explicit message
 instead of silently failing.
-
+ 
 This is also the exact array that Export downloads as JSON and Import reads back in
 — see Section 6.5.
-
+ 
 ## 5. The evaluation workflow (AI-graded, not heuristic)
-
+ 
 This tool does not call a live AI model to grade answers — it's a static file with no
 backend and no API key. Instead, it generates a complete, ready-to-paste evaluation
 prompt and asks the student to run it through a real model (Claude, ChatGPT, or
 whatever they have access to) themselves, then transcribe the 5 scores back in.
-
+ 
 **Why this instead of client-side heuristic scoring:** an earlier version of this tool
 computed a 0-100 score client-side from word count, filler-word rate, and keyword
 overlap with the model answer. That approach is free and instant, but it isn't a real
@@ -169,17 +166,17 @@ overlap quirks. Rather than show students a number that looks authoritative but 
 be wrong, the dashboard now only reflects scores a real model actually produced, that
 a human read and transcribed. The tradeoff is one extra copy/paste step per
 evaluation — worth it for score integrity.
-
+ 
 ### 5.1 What happens automatically (no AI needed)
-
+ 
 Three metrics are measured live and require no model call, since they're objectively
 computable: **Duration** (elapsed time since the student's first keystroke or the
 start of recording), **Pace** (words ÷ elapsed minutes — real WPM, not estimated), and
 **Filler Words** (see Section 8 for the exact word list). These feed directly into the
 generated prompt so the external AI can factor delivery into its feedback.
-
+ 
 ### 5.2 The generated prompt
-
+ 
 `buildEvaluationPrompt()` in the `<script>` block assembles a prompt from: a fixed
 role/instruction preamble, the question's `category` and `question` text, the live
 delivery metrics, the student's answer, and a strict output-format instruction listing
@@ -187,29 +184,28 @@ all 5 rubric dimensions so the model's response is easy to read scores back from
 "Copy Prompt" button copies this exact text to the clipboard via
 `navigator.clipboard.writeText()`, with a `document.execCommand('copy')` fallback for
 browsers that block the Clipboard API in this context.
-
+ 
 ### 5.3 The 5-dimension rubric
-
+ 
 - **Business Acumen & P&L Judgment**
 - **Structured Problem-Solving**
 - **Cross-Functional Leadership & Influence**
 - **Strategic Judgment & Prioritization**
 - **Delivery, Pacing & Presence**
-
 Each is entered on a 1-5 scale via a dropdown (`RUBRIC_DIMENSIONS` in the `<script>`
 block — edit the `label` values there to change the rubric; the `key` values are the
 storage field names and changing them will orphan any already-saved history). All 5
 must be filled before "Save to Dashboard" will accept the entry — partial submissions
 are rejected with an inline message rather than silently saved as zeros.
-
+ 
 `Overall` = `(sum of the 5 scores / 5) * 20`, mapped to the same band system used
 throughout the dashboard: Interview Ready (80+), Solid Progress (60-79), Developing
 (40-59), Needs Work (<40).
-
+ 
 ## 6. How to make common edits
-
+ 
 ### 6.1 Add or edit a question
-
+ 
 1. Open the HTML file in a text editor and locate the `GM_QUESTIONS` array inside
    the `<script>` tag.
 2. Add a new object following the schema in Section 4.1. Use the next sequential
@@ -218,37 +214,35 @@ throughout the dashboard: Interview Ready (80+), Solid Progress (60-79), Develop
    or it will create an unintended 9th filter chip (the category chip list is
    generated automatically from whatever values appear in the data — see Section 6.3).
 4. Save and reopen the file in a browser to confirm it renders correctly.
-
 ### 6.2 Add a new framework, battlecard section, or red flag
-
+ 
 Same pattern — add a new object to `FRAMEWORKS`, `BATTLECARD`, or `REDFLAGS`
 following the shapes in Sections 4.2–4.4. These sections render dynamically from
 the array, so no other code changes are needed.
-
+ 
 ### 6.3 Important: category chips are auto-generated, hero stats are not
-
+ 
 The category filter chips and the difficulty filter chips are built dynamically
 from whatever values exist in `GM_QUESTIONS` — you do not need to edit the filter
 UI separately when adding a category.
-
+ 
 **However**, the hero section stat tiles (100 / 8 / 10 / 8 / 10) near the top of the
 page are hardcoded text, not calculated from the data. If you add or remove
 questions, frameworks, battlecard sections, or red flags, update the corresponding
 `<div class="num">` values in the hero section manually.
-
+ 
 ### 6.4 Editing the standard footer / branding
-
+ 
 - Footer text and copyright line live in the `<footer class="site">` block near
   the end of the HTML body — this follows the standard playbook footer used across
   the repo family (Cory Burk / Full-Time MBA Program / David Eccles School of Business).
 - Brand colors are defined once in `:root` at the top of the `<style>` block:
   `--red: #CC0000` (primary/Eccles red) and `--gold: #c9a84c` (accent). Change these
   two variables to re-theme the entire tool consistently.
-
 ### 6.5 Export / Import / Reset
-
+ 
 These three buttons live in the Readiness Dashboard header (`.dashboard-actions`):
-
+ 
 - **Export** (`exportHistory()`) — serializes `practiceHistory` to JSON and triggers
   a browser download named `gmldp-readiness-backup.json`, via a `Blob` + temporary
   `<a download>` element. No server round-trip.
@@ -263,11 +257,10 @@ These three buttons live in the Readiness Dashboard header (`.dashboard-actions`
   dialog. Separate from the in-modal "Reset" button, which only clears the current
   practice session (transcript, timer, dropdown selections) and does not touch saved
   history.
-
 ## 7. Hosting / deployment
-
+ 
 This file needs no build step and no server-side logic. Options:
-
+ 
 - **Direct file share:** send the `.html` file directly — recipients double-click
   to open it locally.
 - **Static hosting:** upload as-is to GitHub Pages, Netlify, an S3 static site, or
@@ -275,9 +268,8 @@ This file needs no build step and no server-side logic. Options:
 - **HTTPS recommendation:** the voice input feature (Web Speech API) generally
   requires either `localhost` or an HTTPS origin to request microphone access in
   most browsers. Typed practice always works regardless of hosting method.
-
 ## 8. Browser compatibility & known limitations
-
+ 
 | Feature | Chrome / Edge | Safari | Firefox |
 |---|---|---|---|
 | All content, filters, frameworks, battlecard | ✅ | ✅ | ✅ |
@@ -285,9 +277,9 @@ This file needs no build step and no server-side logic. Options:
 | Voice input (Web Speech API) | ✅ | ⚠️ Limited/inconsistent | ❌ Not supported |
 | Copy Prompt (Clipboard API, with execCommand fallback) | ✅ | ✅ | ✅ |
 | Readiness Dashboard persistence (localStorage) | ✅ | ✅ | ✅ (fails silently in private/incognito modes on some browsers) |
-
+ 
 **Known limitations, by design:**
-
+ 
 - **Grading requires a manual round-trip through an external AI.** This file has no
   backend and no API key, so it cannot evaluate an answer itself. The student copies
   a generated prompt into Claude or ChatGPT, reads 5 scores off the response, and
@@ -320,12 +312,11 @@ This file needs no build step and no server-side logic. Options:
   current device's saved history entirely (with a confirmation prompt first). If
   you want merge semantics later, that needs explicit dedup logic against
   `questionId` + `timestamp` — see Section 6.5.
-
 ## 9. Testing / QA procedure
-
+ 
 Before shipping any content or code change, run the automated interaction test
 suite (Playwright + headless Chromium). Two test files cover this tool:
-
+ 
 **Core interaction suite** (33 checks):
 - Data integrity (correct counts across all 4 datasets; every question has all
   4 non-empty answer fields)
@@ -335,7 +326,6 @@ suite (Playwright + headless Chromium). Two test files cover this tool:
 - Practice modal open (both entry points) / close
 - Mic button behavior (graceful no-crash fallback when unsupported)
 - Zero JavaScript console errors or uncaught exceptions across the full run
-
 **Evaluation/scoring/dashboard suite** (36 checks):
 - Empty-state rendering (ring shows "Getting Started," all 8 domains "Not started")
 - All 5 rubric dropdowns render with the exact approved labels
@@ -357,16 +347,24 @@ suite (Playwright + headless Chromium). Two test files cover this tool:
   is actually working, not just in-memory JS state)
 - Dashboard-level Reset (with its confirm dialog) clears everything, and the
   cleared state itself persists after another reload
-
 Re-run both suites after any edit to the HTML file's data or script — a single
 malformed object (a missing comma, an unescaped quote in question text) is enough
 to silently break the whole tool, since it's all one `<script>` block. The
 persistence, export/import, and prompt-generation checks are the ones most likely
 to break silently during a well-intentioned refactor, so don't skip them for
 changes that "only touch the UI."
-
+ 
 ## 10. Version history
-
+ 
+- **v2.1 (August 2026)** — Fixed a duplicate-save bug: clicking "Save to Dashboard"
+  multiple times in a row (e.g. accidental double/triple-click) logged a separate
+  attempt record each time, inflating the total evaluations count and corrupting
+  the Score Progress Over Time chart with repeated identical data points. The
+  button now disables itself and relabels to "Saved ✓" immediately after a
+  successful save, and only re-enables when the student clicks the in-modal
+  "Reset" button or closes and reopens the practice modal — both of which already
+  clear the transcript and timer, so re-enabling save at the same moments is the
+  correct behavior, not an extra rule to remember.
 - **v2.0 (August 2026)** — Replaced client-side heuristic scoring with a real
   AI-graded evaluation workflow, matching the design of the companion PMM
   interview playbook:
@@ -413,10 +411,10 @@ changes that "only touch the UI."
   frameworks / 8-section battlecard / 10 red flags. Built from the same prompt
   template and methodology as the Finance LDP playbook, retargeted for
   consumer/retail GM & rotational leadership programs.
-
 ---
-
+ 
 Developed by Cory Burk, Senior Manager, Program Management · Full-Time MBA Program ·
 David Eccles School of Business.
-
+ 
 © 2026 University of Utah, David Eccles School of Business. All rights reserved.
+ 
