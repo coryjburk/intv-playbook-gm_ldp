@@ -1,4 +1,4 @@
-# Eccles MBA — General Management & Rotational LDP Interview Playbook
+# Eccles MBA - General Management & Rotational LDP Interview Playbook
 
 A single-file, self-contained HTML interview preparation tool for Eccles Full-Time MBA
 students targeting General Management (GM) and Rotational Leadership Development
@@ -16,7 +16,6 @@ For a fuller walkthrough of the student-facing experience, see the accompanying 
 - **▶ **User Manual:** [GM LDP User Manual (DOCX)](https://github.com/coryjburk/intv-playbook-gm_ldp/raw/main/GM_LDP_Playbook_User_Manual.docx)**
 
 ---
-
 
 ## 1. What this is
 
